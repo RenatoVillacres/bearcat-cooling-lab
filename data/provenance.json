@@ -1,0 +1,276 @@
+{
+  "title": "Bearcat cooling model: data and assumptions",
+  "workbook": "Cooling_Heat_Rejection_Complete.xlsx",
+  "numericalSourceSha256": "bc1f9169c9ab9158a104ca9819240925af32d984388fc6e5927510d8621d49c8",
+  "rawSamples": 361115,
+  "originalChannels": 40,
+  "originalHeaders": [
+    "Time (sec)",
+    "RPM",
+    "Air Temp (F)",
+    "Coolant Temp (F)",
+    "TPS (%)",
+    "MAP (psi)",
+    "Fuel Open Time (ms)",
+    "Fuel Duty Cycle (%)",
+    "Ignition Angle (DBTDC)",
+    "Digital Input #1",
+    "Digital Input #2",
+    "Digital Input #3",
+    "Digital Input #4",
+    "Digital Input #5",
+    "Digital Input #6",
+    "Digital Input #7",
+    "Digital Input #8",
+    "     EGT",
+    "  FR WSS",
+    "  FL WSS",
+    "  RA CSS",
+    "TurboRPM",
+    "Digital Output #1",
+    "Digital Output #2",
+    "Digital Output #3",
+    "Digital Output #4",
+    "Digital Output #5",
+    "Digital Output #6",
+    "Digital Output #7",
+    "Digital Output #8",
+    "Digital Output #9",
+    "Digital Output #10",
+    "Avg Driven Wheel Speed (MPH)",
+    "Avg Non Driven Wheel Speed (MPH)",
+    "Percent Slip",
+    "Measured AFR #1",
+    "Fuel Pressure(psi)",
+    "Oil Pressure(psi)",
+    "Crank Error Count",
+    "Gear"
+  ],
+  "extraction": "All source rows retained at their recorded time resolution. Only seven calculation channels are packaged for this app; all 40 original channels remain in Raw 01\u201319 column H of the workbook. No smoothing or resampling is used for calculations.",
+  "sourceRowLookup": "For a run, original CSV line = zero-based JSON row index + originalCsvFirstDataLine. Global raw row ID = zero-based JSON row index + firstGlobalRawRowId. Block = floor((global raw row ID - 2)/20000) + 1; worksheet row = ((global raw row ID - 2) mod 20000) + 2.",
+  "channels": [
+    {
+      "key": "t",
+      "header": "Time (sec)",
+      "csvColumn": "A",
+      "unit": "s"
+    },
+    {
+      "key": "rpm",
+      "header": "RPM",
+      "csvColumn": "B",
+      "unit": "rpm"
+    },
+    {
+      "key": "pw",
+      "header": "Fuel Open Time (ms)",
+      "csvColumn": "G",
+      "unit": "ms"
+    },
+    {
+      "key": "fuel",
+      "header": "Fuel Pressure(psi)",
+      "csvColumn": "AK",
+      "unit": "psi gauge",
+      "note": "Gauge interpretation is a model assumption."
+    },
+    {
+      "key": "map",
+      "header": "MAP (psi)",
+      "csvColumn": "F",
+      "unit": "psi absolute",
+      "note": "Absolute interpretation is a model assumption."
+    },
+    {
+      "key": "speed",
+      "header": "Avg Non Driven Wheel Speed (MPH)",
+      "csvColumn": "AH",
+      "unit": "mph"
+    },
+    {
+      "key": "voltage",
+      "header": null,
+      "csvColumn": null,
+      "unit": "V",
+      "note": "No voltage channel in these 18 files. Missing, not zero. Baseline uses assumed 14 V."
+    }
+  ],
+  "calibration": {
+    "currentFlowCcMinPerInjector": 230,
+    "currentFlowSource": "Keenan reported Andrew repeated an injector flow test and instructed use of 230 cc/min per injector. Static fully open interpretation and 47 psi differential test pressure remain assumed, pending confirmation.",
+    "densityGcc": 0.7369325445,
+    "densitySource": "THE Excel Sheet.xlsx, Fuel Used & Heat Rej.!E10:E11: 6.15 lb/US gal and conversion to 736.9325445 kg/m\u00b3. Inherited property, not a certificate for the actual fuel.",
+    "lhvKjKg": 43116.09756097561,
+    "lhvSource": "THE Excel Sheet.xlsx, Fuel Used & Heat Rej.!E44:E46: inherited 114,000 BTU/US gal converted using the same fuel density. Exact fuel product/LHV not confirmed.",
+    "supersededFlowGMinPerInjector": 328,
+    "supersededFlowSource": "ER180201 injector bench report, Raw Data!R23:T24, 328 g in one minute at Raw Data!R5 = 47 psi. Keenan identified this older flow datasheet as incorrect. Retained only for historical reproduction.",
+    "deadtimeMsAt14V": 0.8185648829978736,
+    "deadtimeSource": "Old injector bench Raw Data!D42:T43, copied into Source Register!V2:W18. PE3 screenshot corroborates programmed rounded values, not physical validity with the revised injector flow.",
+    "deadtimeCurve": [
+      [
+        8,
+        2.1175339551628216
+      ],
+      [
+        8.5,
+        1.8855751922762236
+      ],
+      [
+        9,
+        1.6536164293896256
+      ],
+      [
+        9.5,
+        1.514441171657667
+      ],
+      [
+        10,
+        1.3752659139257082
+      ],
+      [
+        10.5,
+        1.2824824087710687
+      ],
+      [
+        11,
+        1.1896989036164292
+      ],
+      [
+        11.5,
+        1.0981362884283847
+      ],
+      [
+        12,
+        1.0065736732403403
+      ],
+      [
+        12.5,
+        0.9313521103487096
+      ],
+      [
+        13,
+        0.8561305474570788
+      ],
+      [
+        13.5,
+        0.8373477152274762
+      ],
+      [
+        14,
+        0.8185648829978736
+      ],
+      [
+        14.5,
+        0.7455109805335982
+      ],
+      [
+        15,
+        0.6724570780693228
+      ],
+      [
+        15.5,
+        0.6349699211093769
+      ],
+      [
+        16,
+        0.5974827641494311
+      ]
+    ],
+    "currentScaleRelativeTo328": 0.516751479375
+  },
+  "baselineModel": {
+    "injectorCount": 2,
+    "oldInjectorFlowGMin": 328,
+    "referencePressurePsi": 47,
+    "assumedBatteryV": 14,
+    "deadtimeMs": 0.8185648829978736,
+    "atmosphericPressurePsi": 14.7,
+    "lhvKjKg": 43116.09756097561,
+    "dutyCap": 0.95,
+    "injectionsPer720": 1,
+    "subtractDeadtime": 1,
+    "maxGapSeconds": 0.05,
+    "originalWindowSeconds": 10
+  },
+  "formulas": [
+    {
+      "step": "Pressure across injector",
+      "equation": "deltaP = max(fuelGaugePsi + atmosphericPsi - mapAbsolutePsi, 0)"
+    },
+    {
+      "step": "Static mass flow",
+      "equation": "qRef_g_min = injector_cc_min * density_g_cc; q_g_min = qRef_g_min * sqrt(deltaP / referencePressurePsi)"
+    },
+    {
+      "step": "Pulse frequency",
+      "equation": "pulses_per_second = RPM * injectionsPer720 / 120"
+    },
+    {
+      "step": "Commanded duty",
+      "equation": "Dcmd = min(max(PW_ms, 0) * max(RPM, 0) * injectionsPer720 / 120000, dutyCap)"
+    },
+    {
+      "step": "Effective duty",
+      "equation": "Deff = max(Dcmd - subtractDeadtime * deadtime_ms * max(RPM, 0) * injectionsPer720 / 120000, 0)"
+    },
+    {
+      "step": "Fuel flow",
+      "equation": "fuel_g_s = injectorCount * q_g_min * Deff / 60"
+    },
+    {
+      "step": "Fuel power",
+      "equation": "fuel_kW = fuel_g_s / 1000 * LHV_kJ_kg"
+    },
+    {
+      "step": "Window average",
+      "equation": "Pavg = integral(fuel_kW dt) / valid_interval_seconds; integrate piecewise-linear power with interpolated window boundaries."
+    },
+    {
+      "step": "Coolant load and margin",
+      "equation": "coolant_kW = average_fuel_kW * coolantFraction; with_margin_kW = coolant_kW * safetyFactor"
+    }
+  ],
+  "assumptions": [
+    "Both injectors share the one logged pulse width and static flow. Separate cylinder or staged injector operation is not measured by this channel.",
+    "One injection per 720 degrees is the historical convention. Pulse count and logged PW definition must match the actual ECU strategy.",
+    "Opening delay is subtracted only under the assumption that logged PW includes it. The 95% commanded duty cap is a working model assumption, not a verified firmware limit.",
+    "Coolant fractions 25\u201340% are sensitivity inputs, not measured engine fractions or radiator efficiencies.",
+    "SF 1.2 is a separate 20% engineering margin, not a measured uncertainty bound.",
+    "Time-weighted means include all valid time in the selection. Moving intervals require both endpoints above 5 mph and at least 1000 rpm. Neither a filename nor the moving filter identifies clean endurance laps.",
+    "The baseline splits gaps greater than 0.05 seconds, time resets, duplicates, and file boundaries. Windows never bridge these breaks."
+  ],
+  "validation": {
+    "baselineWorkbookCells": {
+      "peak10FuelKwOld": "Our Calculator!O14; Calc 11!I19984",
+      "meanAllFuelKwOld": "Our Calculator!O18",
+      "meanEnduro003FuelKwOld": "Our Calculator!O30; Source Register!J15",
+      "movingAllFuelKwOld": "Our Calculator!O28"
+    },
+    "peak10FuelKwOld": 259.00647309360846,
+    "meanAllFuelKwOld": 70.23698590548139,
+    "movingAllFuelKwOld": 103.39423134085686,
+    "totalValidDurationSeconds": 3611.324,
+    "meanEnduro003FuelKwOld": 106.99372770743472,
+    "peak10FuelKw230": 133.8419781388233,
+    "meanEnduro003FuelKw230": 55.289167076662814,
+    "numericalReproductionIsPhysicalValidation": false
+  },
+  "references": [
+    {
+      "title": "NASA: compressible mass flow / choking",
+      "url": "https://www.grc.nasa.gov/www/k-12/airplane/mflchk.html"
+    },
+    {
+      "title": "MIT: heat exchanger energy balance",
+      "url": "https://web.mit.edu/16.unified/www/FALL/thermodynamics/notes/node131.html"
+    },
+    {
+      "title": "MIT 2.61: engine heat transfer, Lecture 18",
+      "url": "https://ocw.mit.edu/courses/2-61-internal-combustion-engines-spring-2017/df96f507776900c0dde50a4b50f422ce_MIT2_61S17_lec18.pdf"
+    },
+    {
+      "title": "Performance Electronics PE3 user manual",
+      "url": "https://pe-ltd.com/assets/pe3-series-manual.pdf"
+    }
+  ]
+}
